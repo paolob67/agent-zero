@@ -8,6 +8,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_google_genai import GoogleGenerativeAI, HarmBlockThreshold, HarmCategory
+from langchain_ibm import WatsonxLLM
 from pydantic.v1.types import SecretStr
 
 
@@ -79,3 +80,33 @@ def get_openrouter_chat(model_name: str, api_key=get_api_key("openrouter"), temp
       
 def get_openrouter_embedding(model_name: str, api_key=get_api_key("openrouter"), base_url=os.getenv("OPEN_ROUTER_BASE_URL") or "https://openrouter.ai/api/v1"):
     return OpenAIEmbeddings(model=model_name, api_key=api_key, base_url=base_url) # type: ignore
+
+# Watsonx Models
+
+# Watsonx model default params
+watsonx_def_params = {
+    "decoding_method": "greedy",
+    "temperature": 0, 
+    "min_new_tokens": 5,
+    "max_new_tokens": 250,
+    "stop_sequences":['\n\n']
+}
+
+def get_watsonx_llm(model_name:str, _params=watsonx_def_params):
+
+    credentials = {
+        "url": os.getenv("URL_WATSONX"),
+        "apikey": os.getenv("API_KEY_WATSONX"),   
+        "project_id": os.getenv("PRJ_ID_WATSONX")
+    }
+
+    return WatsonxLLM(
+        model_id =  model_name,
+        url = credentials.get("url"), # type: ignore
+        apikey = credentials.get("apikey"), # type: ignore
+        project_id =  credentials.get("project_id"),
+        params = _params
+    )
+
+#TODO Add definition for models.get_watsonx_embedding
+# def get_watsonx_embedding(model_name:str)
