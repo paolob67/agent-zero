@@ -8,6 +8,7 @@ langchain-openai==0.2.1
 langchain-community==0.3.1
 langchain-anthropic==0.2.1
 langchain-google-genai==2.0.0
+ibm_watsonx_ai==1.1.9
 webcolors==24.6.0
 sentence-transformers==3.0.1
 docker==7.1.0
