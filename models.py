@@ -89,7 +89,7 @@ watsonx_def_params = {
     "decoding_method": "greedy",
     "temperature": 0, 
     "min_new_tokens": 5,
-    "max_new_tokens": 250,
+    "max_new_tokens": 1000,
     "stop_sequences":['\n\n']
 }
 # Watsonx embeddings default params
