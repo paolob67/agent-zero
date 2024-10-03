@@ -8,7 +8,8 @@ from langchain_anthropic import ChatAnthropic
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_google_genai import GoogleGenerativeAI, HarmBlockThreshold, HarmCategory
-from langchain_ibm import WatsonxLLM
+from langchain_ibm import WatsonxLLM, WatsonxEmbeddings
+from ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames
 from pydantic.v1.types import SecretStr
 
 
@@ -91,22 +92,32 @@ watsonx_def_params = {
     "max_new_tokens": 250,
     "stop_sequences":['\n\n']
 }
-
-def get_watsonx_llm(model_name:str, _params=watsonx_def_params):
-
-    credentials = {
+# Watsonx embeddings default params
+watsonx_def_embed_params = {
+    EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 3,
+    EmbedTextParamsMetaNames.RETURN_OPTIONS: {"input_text": True},
+}
+# Watsonx credentials
+watsonx_credentials = {
         "url": os.getenv("URL_WATSONX"),
         "apikey": os.getenv("API_KEY_WATSONX"),   
         "project_id": os.getenv("PRJ_ID_WATSONX")
     }
 
+def get_watsonx_llm(model_name:str, params=watsonx_def_params):
     return WatsonxLLM(
         model_id =  model_name,
-        url = credentials.get("url"), # type: ignore
-        apikey = credentials.get("apikey"), # type: ignore
-        project_id =  credentials.get("project_id"),
-        params = _params
+        url = watsonx_credentials.get("url"), # type: ignore
+        apikey = watsonx_credentials.get("apikey"), # type: ignore
+        project_id =  watsonx_credentials.get("project_id"),
+        params = params
     )
 
-#TODO Add definition for models.get_watsonx_embedding
-# def get_watsonx_embedding(model_name:str)
+def get_watsonx_embedding(model_name:str, params=watsonx_def_embed_params):
+    return WatsonxEmbeddings(
+        model_id = model_name,
+        url = watsonx_credentials.get("url"), # type: ignore
+        apikey = watsonx_credentials.get("apikey"), # type: ignore
+        project_id =  watsonx_credentials.get("project_id"),
+        params = params
+    )

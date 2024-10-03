@@ -20,8 +20,8 @@ def initialize():
     # embedding model used for memory
     # embedding_llm = models.get_openai_embedding(model_name="text-embedding-3-small")
     # embedding_llm = models.get_ollama_embedding(model_name="nomic-embed-text")
-    embedding_llm = models.get_huggingface_embedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    #TODO: add call to watsonx embeddings models.get_watsonx_embedding
+    # embedding_llm = models.get_huggingface_embedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embedding_llm = models.get_watsonx_embedding(model_name="ibm/slate-125m-english-rtrvr-v2")
     # embedding_llm = models.get_lmstudio_embedding(model_name="nomic-ai/nomic-embed-text-v1.5-GGUF")
 
     # agent configuration
